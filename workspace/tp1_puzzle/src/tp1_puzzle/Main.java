@@ -1,17 +1,17 @@
 package tp1_puzzle;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Stack;
 
 public class Main {
 
 	public static void main(String[] args) {
-		final String canonical = "123456780";
+		final int[][] canonical = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 		State finalState = new State(canonical);
 		System.out.println(finalState);
 		State currentState = randomState(canonical);
+		System.out.println(currentState);
 		//		List<State> list = new ArrayList<State>();
 		//		list.add(new State(canonical));
 		//		currentState.setSuccessors(list);
@@ -53,16 +53,25 @@ public class Main {
 		}
 	}
 
-	public static State randomState(String string) {
-		List<String> letters = Arrays.asList(string.split(""));
-		Collections.shuffle(letters);
-		String newString = "";
-
-		for (String letter : letters) {
-			newString += letter;
+	public static State randomState(int[][] tab) {
+		Stack<Integer> oneDim = new Stack<Integer>();
+		int twoDim[][] = new int[tab.length][tab[0].length];
+		
+		for (int i = 0; i < tab.length; i++) {
+			for (int j = 0; j < tab[0].length; j++) {
+				oneDim.add(tab[i][j]);
+			}
 		}
-
-		return new State(newString);
+		
+		Collections.shuffle(oneDim);
+		
+		for (int i = 0; i < twoDim.length; i++) {
+			for (int j = 0; j < twoDim[0].length; j++) {
+				twoDim[i][j] = oneDim.pop();
+			}
+		}
+	    
+	    return new State(twoDim);
 	}
 
 }

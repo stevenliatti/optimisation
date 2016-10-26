@@ -3,17 +3,24 @@ package tp1_puzzle;
 import java.util.List;
 
 public class State {
-	private String layout;
-	private List<State> successors;
+	private String strLayout;
+	private int[][] tabLayout;
+	List<State> successors;
 	
-	public State(String layout) {
-		this.layout = layout;
+	public State(int[][] tabLayout) {
+		this.tabLayout = tabLayout;
+		this.generateStrLayout(tabLayout);
 		this.generateSuccessors();
 	}
 	
 	public State(State state) {
-		this.layout = state.layout;
+		this.tabLayout = state.tabLayout;
+		this.generateStrLayout(state.tabLayout);
 		this.successors = state.successors;
+	}
+	
+	private void generateStrLayout(int[][] tabLayout) {
+		
 	}
 	
 	public void generateSuccessors() {
@@ -29,10 +36,10 @@ public class State {
 		if (getClass() != obj.getClass())
 			return false;
 		State other = (State) obj;
-		if (layout == null) {
-			if (other.layout != null)
+		if (strLayout == null) {
+			if (other.strLayout != null)
 				return false;
-		} else if (!layout.equals(other.layout))
+		} else if (!strLayout.equals(other.strLayout))
 			return false;
 		return true;
 	}
@@ -45,21 +52,33 @@ public class State {
 	 * 
 	 * @return l'état du puzzle formaté
 	 */
+	@Override
 	public String toString() {
-		int sqrt = (int) Math.sqrt(layout.length());
-		String print = "";
-		for (int i = 0; i < layout.length(); i = i + sqrt) {
-			print += layout.substring(i, i + sqrt) + "\n";
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < tabLayout.length; i++) {
+			for (int j = 0; j < tabLayout[0].length; j++) {
+				builder.append(tabLayout[i][j]);
+			}
+			builder.append("\n");
 		}
-		return print;
-	}
-	
-	public String getLayout() {
-		return layout;
+		
+		return builder.toString();
 	}
 
-	public void setLayout(String layout) {
-		this.layout = layout;
+	public String getStrLayout() {
+		return strLayout;
+	}
+
+	public void setStrLayout(String strLayout) {
+		this.strLayout = strLayout;
+	}
+
+	public int[][] getTabLayout() {
+		return tabLayout;
+	}
+
+	public void setTabLayout(int[][] tabLayout) {
+		this.tabLayout = tabLayout;
 	}
 
 	public List<State> getSuccessors() {
