@@ -12,9 +12,6 @@ public class Main {
 		System.out.println(finalState);
 		State currentState = randomState(canonical);
 		System.out.println(currentState);
-		//		List<State> list = new ArrayList<State>();
-		//		list.add(new State(canonical));
-		//		currentState.setSuccessors(list);
 		int iterations = 0;
 		PriorityQueue<State> queue = new PriorityQueue<State>();
 
@@ -38,6 +35,7 @@ public class Main {
 			// b. n <- RETIRER(FILE)
 			// c. s <- ETAT(n)
 			currentState = queue.poll();
+			currentState.generateSuccessors();
 			for (State state : currentState.getSuccessors()) {
 				iterations++;
 				// i.  Créer un nouveau noeud n' comme "enfant" de n
