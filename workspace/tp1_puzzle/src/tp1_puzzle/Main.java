@@ -1,8 +1,8 @@
 package tp1_puzzle;
 
 import java.util.Collections;
-import java.util.PriorityQueue;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Main {
 
@@ -13,7 +13,7 @@ public class Main {
 		State currentState = randomState(canonical);
 		System.out.println(currentState);
 		int iterations = 0;
-		PriorityQueue<State> queue = new PriorityQueue<State>();
+		ConcurrentLinkedQueue<State> queue = new ConcurrentLinkedQueue<State>();
 
 		// 1. Si SOLUTION?(état-initial) alors retourner état-initial
 		if (currentState.equals(finalState)) {
@@ -54,21 +54,21 @@ public class Main {
 	public static State randomState(int[][] tab) {
 		Stack<Integer> oneDim = new Stack<Integer>();
 		int twoDim[][] = new int[tab.length][tab[0].length];
-		
+
 		for (int i = 0; i < tab.length; i++) {
 			for (int j = 0; j < tab[0].length; j++) {
 				oneDim.add(tab[i][j]);
 			}
 		}
-		
+
 		Collections.shuffle(oneDim);
-		
+
 		for (int i = 0; i < twoDim.length; i++) {
 			for (int j = 0; j < twoDim[0].length; j++) {
 				twoDim[i][j] = oneDim.pop();
 			}
 		}
-	    
+
 	    return new State(twoDim);
 	}
 
