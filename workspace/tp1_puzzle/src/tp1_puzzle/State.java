@@ -32,7 +32,6 @@ public class State {
 	}
 	
 	private int[][] newTabLayout(Point oldPos, Point newPos) {
-		System.out.println("Old and new : " + oldPos + " - " + newPos);
 		int newTabLayout[][] = new int[tabLayout.length][tabLayout[0].length];
 		for (int i = 0; i < newTabLayout.length; i++) {
 			for (int j = 0; j < newTabLayout[i].length; j++) {
@@ -42,13 +41,10 @@ public class State {
 		int temp = newTabLayout[oldPos.x][oldPos.y];
 		newTabLayout[oldPos.x][oldPos.y] = newTabLayout[newPos.x][newPos.y];
 		newTabLayout[newPos.x][newPos.y] = temp;
-		System.out.println("tablayout");
-		printTab(tabLayout);
-		System.out.println("newtablayout");
-		printTab(newTabLayout);
 		return newTabLayout;
 	}
 	
+	@SuppressWarnings("unused")
 	private void printTab(int[][] newTabLayout) {
 		for (int i = 0; i < newTabLayout.length; i++) {
 			for (int j = 0; j < newTabLayout.length; j++) {
@@ -70,32 +66,23 @@ public class State {
 			}
 		}
 		
-		System.out.println(emptySquare);
 		int newTabLayout[][];
 
 		if (emptySquare.x - 1 >= 0) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x - 1, emptySquare.y));
-			printTab(newTabLayout);
-			State newState = new State(newTabLayout);
-			successors.add(newState);
+			successors.add(new State(newTabLayout));
 		}
 		if (emptySquare.x + 1 < tabLayout.length) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x + 1, emptySquare.y));
-			printTab(newTabLayout);
-			State newState = new State(newTabLayout);
-			successors.add(newState);
+			successors.add(new State(newTabLayout));
 		}
 		if (emptySquare.y - 1 >= 0) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x, emptySquare.y - 1));
-			printTab(newTabLayout);
-			State newState = new State(newTabLayout);
-			successors.add(newState);
+			successors.add(new State(newTabLayout));
 		}
 		if (emptySquare.y + 1 < tabLayout[0].length) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x, emptySquare.y + 1));
-			printTab(newTabLayout);
-			State newState = new State(newTabLayout);
-			successors.add(newState);
+			successors.add(new State(newTabLayout));
 		}
 	}
 

@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Main {
+public class BlindSearch {
 
 	public static void main(String[] args) {
 		final int[][] canonical = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
@@ -17,7 +17,7 @@ public class Main {
 
 		// 1. Si SOLUTION?(état-initial) alors retourner état-initial
 		if (currentState.equals(finalState)) {
-			System.out.println("Solution trouvée en " + iterations + "itérations");
+			System.out.println("Solution trouvée en " + iterations + " itérations");
 			return;
 		}
 
