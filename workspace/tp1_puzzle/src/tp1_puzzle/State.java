@@ -2,7 +2,9 @@ package tp1_puzzle;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 public class State {
 	private String strLayout;
@@ -19,6 +21,27 @@ public class State {
 		this.tabLayout = state.tabLayout;
 		this.strLayout = state.strLayout;
 		this.successors = state.successors;
+	}
+	
+	public static State randomState(int[][] tab) {
+		Stack<Integer> oneDim = new Stack<Integer>();
+		int twoDim[][] = new int[tab.length][tab[0].length];
+
+		for (int i = 0; i < tab.length; i++) {
+			for (int j = 0; j < tab[0].length; j++) {
+				oneDim.add(tab[i][j]);
+			}
+		}
+
+		Collections.shuffle(oneDim);
+
+		for (int i = 0; i < twoDim.length; i++) {
+			for (int j = 0; j < twoDim[0].length; j++) {
+				twoDim[i][j] = oneDim.pop();
+			}
+		}
+
+	    return new State(twoDim);
 	}
 
 	private void generateStrLayout() {
@@ -84,6 +107,11 @@ public class State {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x, emptySquare.y + 1));
 			successors.add(new State(newTabLayout));
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return strLayout.hashCode();
 	}
 
 	@Override
