@@ -14,13 +14,14 @@ public class BlindSearchVisited {
 	}
 
 	public static void main(String[] args) {
-		final int[][] canonical = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+//		final int[][] canonical = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+		final int[][] canonical = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
 		final int[][] example1 = {{5, 2, 4}, {7, 3, 1}, {0, 8, 6}};
-		final int[][] example2 = {{1, 0, 2}, {4, 5, 3}, {7, 8, 6}};
+		final int[][] example2 = {{1, 2, 3, 4}, {5, 6, 7, 0}, {9, 10, 11, 8}, {13, 14, 15, 12}};
 		final int[][] example3 = {{0, 1, 2}, {4, 5, 3}, {7, 8, 6}};
 		State finalState = new State(canonical);
-		State startState = State.randomState(canonical);
-//		State startState = new State(example1);
+//		State startState = State.randomState(canonical);
+		State startState = new State(example2);
 		State currentState = new State(startState);
 		int iterations = 0;
 		ConcurrentLinkedQueue<State> queue = new ConcurrentLinkedQueue<State>();

@@ -145,6 +145,12 @@ public class State {
 		for (int i = 0; i < tabLayout.length; i++) {
 			for (int j = 0; j < tabLayout[0].length; j++) {
 				builder.append(tabLayout[i][j]);
+				if (tabLayout[i][j] < 10) {
+					builder.append("  ");
+				}
+				else {
+					builder.append(" ");
+				}
 			}
 			builder.append("\n");
 		}
