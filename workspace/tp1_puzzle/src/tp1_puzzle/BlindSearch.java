@@ -20,9 +20,9 @@ public class BlindSearch {
 		int[][] finalTab = null;
 		int[][] startTab = null;
 		if (sc.next().equals("y")) {
-			System.out.println("État final [1,2,3,4,5,6,7,8,0] : ");
-			String str = sc.next();
-			String finalStr[] = str.split(",");
+			System.out.println("État final [1 2 3 4 5 6 7 8 0] : ");
+			String str = sc.nextLine();
+			String finalStr[] = str.split(" ");
 			System.out.println(finalStr.length);
 			System.out.println(Math.sqrt(finalStr.length));
 			for (int i = 0; i < Math.sqrt(finalStr.length); i++) {
@@ -33,8 +33,8 @@ public class BlindSearch {
 			}
 			finalState = new State(finalTab);
 			
-			System.out.println("État initial [1,2,3,4,5,6,7,8,0] : ");
-			str = sc.next();
+			System.out.println("État initial [1 2 3 4 5 6 7 8 0] : ");
+			str = sc.nextLine();
 			String startStr[] = str.split(",");
 			for (int i = 0; i < Math.sqrt(finalStr.length); i++) {
 				for (int j = 0; j < Math.sqrt(finalStr.length); j++) {
