@@ -43,6 +43,27 @@ public class State {
 
 	    return new State(twoDim);
 	}
+	
+	public static State stateFromString(String str) {
+		String finalStr[] = str.split(" ");
+		final int sqrt = (int) Math.sqrt(finalStr.length);
+		int[][] finalTab = new int[sqrt][sqrt];
+
+		for (int i = 0; i < sqrt; i++) {
+			for (int j = 0; j < sqrt; j++) {
+				finalTab[i][j] = Integer.parseInt(finalStr[sqrt * i + j]);
+			}
+		}
+		return new State(finalTab);
+	}
+	
+	public static void printSituation(State startState, State currentState, int iterations) {
+		System.out.println("Nombre d'itérations : " + iterations);
+		System.out.println("État de départ : ");
+		System.out.println(startState);
+		System.out.println("État final : ");
+		System.out.println(currentState);
+	}
 
 	private void generateStrLayout() {
 		StringBuilder builder = new StringBuilder();

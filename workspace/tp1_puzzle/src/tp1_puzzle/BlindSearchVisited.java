@@ -1,27 +1,33 @@
 package tp1_puzzle;
 
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BlindSearchVisited {
-	
-	public static void printSituation(State startState, State currentState, int iterations) {
-		System.out.println("Nombre d'itérations : " + iterations);
-		System.out.println("État de départ : ");
-		System.out.println(startState);
-		System.out.println("État final : ");
-		System.out.println(currentState);
-	}
 
 	public static void main(String[] args) {
-//		final int[][] canonical = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
-		final int[][] canonical = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
-		final int[][] example1 = {{5, 2, 4}, {7, 3, 1}, {0, 8, 6}};
-		final int[][] example2 = {{1, 2, 3, 4}, {5, 6, 7, 0}, {9, 10, 11, 8}, {13, 14, 15, 12}};
-		final int[][] example3 = {{0, 1, 2}, {4, 5, 3}, {7, 8, 6}};
-		State finalState = new State(canonical);
-//		State startState = State.randomState(canonical);
-		State startState = new State(example2);
+		final int[][] canonical = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+		State startState;
+		State finalState;
+		
+		@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Voulez-vous entrer à la main les états initiaux et finaux ? (y/n)");
+		
+		if (sc.nextLine().equals("y")) {
+			System.out.println("État final [1 2 3 ...] : ");
+			String str = sc.nextLine();
+			finalState = State.stateFromString(str);
+			
+			System.out.println("État initial [1 2 3 ...] : ");
+			str = sc.nextLine();
+			startState = State.stateFromString(str);
+		}
+		else {
+			finalState = new State(canonical);
+			startState = State.randomState(canonical);
+		}
 		State currentState = new State(startState);
 		int iterations = 0;
 		ConcurrentLinkedQueue<State> queue = new ConcurrentLinkedQueue<State>();
@@ -29,7 +35,7 @@ public class BlindSearchVisited {
 
 		// 1. Si SOLUTION?(état-initial) alors retourner état-initial
 		if (currentState.equals(finalState)) {
-			printSituation(startState, currentState, iterations);
+			State.printSituation(startState, currentState, iterations);
 			return;
 		}
 
@@ -42,7 +48,7 @@ public class BlindSearchVisited {
 			// a. Si vide(FILE) alors retourner échec
 			if (queue.isEmpty()) {
 				System.out.println("Échec");
-				printSituation(startState, currentState, iterations);
+				State.printSituation(startState, currentState, iterations);
 				return;
 			}
 
@@ -55,7 +61,7 @@ public class BlindSearchVisited {
 			// i.  Créer un nouveau noeud n' comme "enfant" de n
 			// ii. Si SOLUTION?(s') alors retourner chemin ou état-solution
 			if (currentState.equals(finalState)) {
-				printSituation(startState, currentState, iterations);
+				State.printSituation(startState, currentState, iterations);
 				return;
 			}
 			currentState.generateSuccessors();
