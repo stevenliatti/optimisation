@@ -3,7 +3,7 @@ package tp1_puzzle;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class BlindSearch {
+public class BlindSearch8 {
 
 	public static void main(String[] args) {
 		final int[][] canonical = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};

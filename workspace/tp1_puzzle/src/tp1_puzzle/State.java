@@ -57,12 +57,22 @@ public class State {
 		return new State(finalTab);
 	}
 	
-	public static void printSituation(State startState, State currentState, int iterations) {
+	public static void printSituation(State startState, State finalState, int iterations) {
 		System.out.println("Nombre d'itérations : " + iterations);
 		System.out.println("État de départ : ");
 		System.out.println(startState);
 		System.out.println("État final : ");
+		System.out.println(finalState);
+	}
+	
+	public static void printSituation(State startState, State currentState, State finalState, int iterations) {
+		System.out.println("Nombre d'itérations : " + iterations);
+		System.out.println("État de départ : ");
+		System.out.println(startState);
+		System.out.println("État courant : ");
 		System.out.println(currentState);
+		System.out.println("État final : ");
+		System.out.println(finalState);
 	}
 
 	private void generateStrLayout() {
