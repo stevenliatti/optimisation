@@ -90,23 +90,25 @@ public class State {
 		return squareFalse - 1;
 	}
 	
-	private static int[] arrayOfIndex(int[][] array) {
+	private static Point[] arrayOfCoordinates(int[][] array) {
 		final int size = array.length * array[0].length;
-		int[] arrayOfIndex = new int[size];
+		Point[] arrayOfCoordinates = new Point[size];
 		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				arrayOfIndex[array[i][j]] = i * size + j;
+			for (int j = 0; j < array[i].length; j++) {
+				arrayOfCoordinates[array[i][j]] = new Point(i, j);
 			}
 		}
-		return arrayOfIndex;
+		return arrayOfCoordinates;
 	}
 	
 	public static int manhattan(State current, State solution) {
 		int distance = 0;
-		int[] arrayCurrent = arrayOfIndex(current.tabLayout);
-		int[] arraySolution = arrayOfIndex(solution.tabLayout);
+		Point[] currCoor = arrayOfCoordinates(current.tabLayout);
+		Point[] solCoor = arrayOfCoordinates(solution.tabLayout);
 		
-		
+		for (int i = 1; i < solCoor.length; i++) {
+			distance += Math.abs(currCoor[i].x - solCoor[i].x) + Math.abs(currCoor[i].y - solCoor[i].y);
+		}
 		
 		return distance;
 	}
