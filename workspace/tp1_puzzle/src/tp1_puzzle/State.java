@@ -75,33 +75,40 @@ public class State {
 		System.out.println(finalState);
 	}
 	
-	private static int[] arrayIndex(int[][] array) {
-		final int size = array.length * array[0].length;
-		int[] arrayIndex = new int[size];
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				arrayIndex[array[i][j]] = i * size + j;
-			}
-		}
-		return arrayIndex;
-	}
-	
 	public static int squareFalse(State current, State solution) {
-		int[] arrayCurrent = arrayIndex(current.tabLayout);
-		int[] arraySolution = arrayIndex(solution.tabLayout);
 		int squareFalse = 0;
 		
-		for (int i = 0; i < arraySolution.length; i++) {
-			if (arrayCurrent[i] != arraySolution[i]) {
-				squareFalse++;
+		for (int i = 0; i < current.tabLayout.length; i++) {
+			for (int j = 0; j < current.tabLayout[i].length; j++) {
+				if (current.tabLayout[i][j] != solution.tabLayout[i][j]) {
+					squareFalse++;
+				}
 			}
 		}
 		
+		// On ne prend pas en compte la case vide
 		return squareFalse - 1;
 	}
 	
+	private static int[] arrayOfIndex(int[][] array) {
+		final int size = array.length * array[0].length;
+		int[] arrayOfIndex = new int[size];
+		for (int i = 0; i < array.length; i++) {
+			for (int j = 0; j < array[0].length; j++) {
+				arrayOfIndex[array[i][j]] = i * size + j;
+			}
+		}
+		return arrayOfIndex;
+	}
+	
 	public static int manhattan(State current, State solution) {
-		return 0;
+		int distance = 0;
+		int[] arrayCurrent = arrayOfIndex(current.tabLayout);
+		int[] arraySolution = arrayOfIndex(solution.tabLayout);
+		
+		
+		
+		return distance;
 	}
 
 	private void generateStrLayout() {
