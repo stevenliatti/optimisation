@@ -23,13 +23,13 @@ public class State {
 		this.successors = state.successors;
 	}
 	
-	public static State randomState(int[][] tab) {
+	public static State randomState(int[][] array) {
 		Stack<Integer> oneDim = new Stack<Integer>();
-		int twoDim[][] = new int[tab.length][tab[0].length];
+		int twoDim[][] = new int[array.length][array[0].length];
 
-		for (int i = 0; i < tab.length; i++) {
-			for (int j = 0; j < tab[0].length; j++) {
-				oneDim.add(tab[i][j]);
+		for (int i = 0; i < array.length; i++) {
+			for (int j = 0; j < array[0].length; j++) {
+				oneDim.add(array[i][j]);
 			}
 		}
 
@@ -73,6 +73,35 @@ public class State {
 		System.out.println(currentState);
 		System.out.println("État final : ");
 		System.out.println(finalState);
+	}
+	
+	private static int[] arrayIndex(int[][] array) {
+		final int size = array.length * array[0].length;
+		int[] arrayIndex = new int[size];
+		for (int i = 0; i < array.length; i++) {
+			for (int j = 0; j < array[0].length; j++) {
+				arrayIndex[array[i][j]] = i * size + j;
+			}
+		}
+		return arrayIndex;
+	}
+	
+	public static int squareFalse(State current, State solution) {
+		int[] arrayCurrent = arrayIndex(current.tabLayout);
+		int[] arraySolution = arrayIndex(solution.tabLayout);
+		int squareFalse = 0;
+		
+		for (int i = 0; i < arraySolution.length; i++) {
+			if (arrayCurrent[i] != arraySolution[i]) {
+				squareFalse++;
+			}
+		}
+		
+		return squareFalse - 1;
+	}
+	
+	public static int manhattan(State current, State solution) {
+		return 0;
 	}
 
 	private void generateStrLayout() {
