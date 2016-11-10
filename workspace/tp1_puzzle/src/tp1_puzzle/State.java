@@ -9,18 +9,21 @@ import java.util.Stack;
 public class State {
 	private String strLayout;
 	private int[][] tabLayout;
-	List<State> successors;
+	private List<State> successors;
+	private int sizePuzzle;
 
 	public State(int[][] tabLayout) {
 		this.tabLayout = tabLayout;
 		this.generateStrLayout();
 		this.successors = new ArrayList<>();
+		this.sizePuzzle = strLayout.length() - 1;
 	}
 
 	public State(State state) {
 		this.tabLayout = state.tabLayout;
 		this.strLayout = state.strLayout;
 		this.successors = state.successors;
+		this.sizePuzzle = strLayout.length() - 1;
 	}
 	
 	public static State randomState(int[][] array) {
@@ -75,12 +78,18 @@ public class State {
 		System.out.println(finalState);
 	}
 	
-	public static int squareFalse(State current, State solution) {
+	/**
+	 * Première heuristique
+	 * 
+	 * @param solution
+	 * @return
+	 */
+	public int squareFalse(State solution) {
 		int squareFalse = 0;
 		
-		for (int i = 0; i < current.tabLayout.length; i++) {
-			for (int j = 0; j < current.tabLayout[i].length; j++) {
-				if (current.tabLayout[i][j] != solution.tabLayout[i][j]) {
+		for (int i = 0; i < tabLayout.length; i++) {
+			for (int j = 0; j < tabLayout[i].length; j++) {
+				if (tabLayout[i][j] != solution.tabLayout[i][j]) {
 					squareFalse++;
 				}
 			}
@@ -101,9 +110,15 @@ public class State {
 		return arrayOfCoordinates;
 	}
 	
-	public static int manhattan(State current, State solution) {
+	/**
+	 * Deuxième heuristique
+	 * 
+	 * @param solution
+	 * @return
+	 */
+	public int manhattan(State solution) {
 		int distance = 0;
-		Point[] currCoor = arrayOfCoordinates(current.tabLayout);
+		Point[] currCoor = arrayOfCoordinates(tabLayout);
 		Point[] solCoor = arrayOfCoordinates(solution.tabLayout);
 		
 		for (int i = 1; i < solCoor.length; i++) {
@@ -229,5 +244,9 @@ public class State {
 
 	public List<State> getSuccessors() {
 		return successors;
+	}
+
+	public int getSizePuzzle() {
+		return sizePuzzle;
 	}
 }
