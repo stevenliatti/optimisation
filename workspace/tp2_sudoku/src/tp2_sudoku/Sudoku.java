@@ -8,19 +8,21 @@ import java.io.IOException;
 public class Sudoku {
 	
 	public final static int SUDOKU_SIZE = 9;
+	public final static int SQUARE_LATIN_SIZE = (int) Math.sqrt(SUDOKU_SIZE);
 
 	public static void main(String[] args) throws IOException {
 		Square[][] board = boardFromFile("data/sudoku.txt");
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-				System.out.print(board[i][j]);
+				System.out.print(board[i][j] + " ");
 			}
 			System.out.println();
 		}
 		initConstraint(board);
+		System.out.println("-------------------------------------------------");
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-				System.out.print(board[i][j]);
+				System.out.print(board[i][j] + " ");
 			}
 			System.out.println();
 		}
@@ -47,8 +49,29 @@ public class Sudoku {
 	public static void initConstraint(Square[][] board) {
 		for (int i = 0; i < SUDOKU_SIZE; i++) {
 			for (int j = 0; j < SUDOKU_SIZE; j++) {
-				if (board[i][j].isFree()) {
+				if (board[i][j].isTaken()) {
+					for (int k = 0; k < board.length; k++) {
+						if (board[i][k].isFree()) {
+							board[i][k].getPossibleValues().remove(board[i][j].getValue());
+						}
+					}
 					
+					for (int l = 0; l < board.length; l++) {
+						if (board[l][j].isFree()) {
+							board[l][j].getPossibleValues().remove(board[i][j].getValue());
+						}
+					}
+					
+					int modLine = (i / SQUARE_LATIN_SIZE) * SQUARE_LATIN_SIZE;
+					int modColumn = (j / SQUARE_LATIN_SIZE) * SQUARE_LATIN_SIZE;
+					
+					for (int k = modLine; k < modLine + SQUARE_LATIN_SIZE; k++) {
+						for (int l = modColumn; l < modColumn + SQUARE_LATIN_SIZE; l++) {
+							if (board[k][l].isFree()) {
+								board[k][l].getPossibleValues().remove(board[i][j].getValue());
+							}
+						}
+					}
 				}
 			}
 		}

@@ -23,7 +23,7 @@ public class Square {
 		
 		if (value.equals("-")) {
 			this.taken = false;
-			for (int i = 0; i < Sudoku.SUDOKU_SIZE; i++) {
+			for (int i = 1; i <= Sudoku.SUDOKU_SIZE; i++) {
 				possibleValues.add(String.valueOf(i));
 			}
 		}
@@ -34,7 +34,9 @@ public class Square {
 
 	@Override
 	public String toString() {
-		return value;
+//		return value;
+//		return String.valueOf(possibleValues.size());
+		return possibleValues.toString();
 	}
 
 	public boolean isFree() {
