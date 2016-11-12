@@ -35,8 +35,8 @@ public class Square {
 	@Override
 	public String toString() {
 //		return value;
-//		return String.valueOf(possibleValues.size());
-		return possibleValues.toString();
+		return String.valueOf(possibleValues.size());
+//		return possibleValues.toString();
 	}
 
 	public boolean isFree() {
