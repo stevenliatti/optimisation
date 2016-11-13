@@ -3,39 +3,51 @@ package tp2_sudoku;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Square {
+public final class Square {
 	private boolean taken;
 	private String value;
-	private Set<String> possibleValues;
+	private Set<String> legalValues;
 	
 	public Square() {
 		this.taken = false;
 		this.value = "-";
-		this.possibleValues = new HashSet<String>();
+		this.legalValues = new HashSet<String>();
 		for (int i = 1; i <= Sudoku.SUDOKU_SIZE; i++) {
-			possibleValues.add(String.valueOf(i));
+			legalValues.add(String.valueOf(i));
 		}
 	}
 	
 	public Square(String value) {
-		this.possibleValues = new HashSet<String>();
+		this.legalValues = new HashSet<String>();
 		this.value = value;
 		
 		if (value.equals("-")) {
 			this.taken = false;
 			for (int i = 1; i <= Sudoku.SUDOKU_SIZE; i++) {
-				possibleValues.add(String.valueOf(i));
+				legalValues.add(String.valueOf(i));
 			}
 		}
 		else {
 			this.taken = true;
 		}
 	}
+	
+	public Square(Square square) {
+		this.taken = square.taken;
+		this.value = new String(square.value);
+		this.legalValues = new HashSet<String>(square.getLegalValues());
+	}
+	
+	public void updatePossibleValues(String value) {
+		this.legalValues.remove(value);
+	}
+	
+	
 
 	@Override
 	public String toString() {
 //		return value;
-		return String.valueOf(possibleValues.size());
+		return String.valueOf(legalValues.size());
 //		return possibleValues.toString();
 	}
 
@@ -59,11 +71,11 @@ public class Square {
 		this.value = value;
 	}
 
-	public Set<String> getPossibleValues() {
-		return possibleValues;
+	public Set<String> getLegalValues() {
+		return legalValues;
 	}
 	
-	public void setPossibleValues(Set<String> possibleValues) {
-		this.possibleValues = possibleValues;
+	public void setLegalValues(Set<String> legalValues) {
+		this.legalValues = legalValues;
 	}
 }
