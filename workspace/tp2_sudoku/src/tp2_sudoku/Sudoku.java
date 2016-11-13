@@ -7,28 +7,36 @@ import java.util.Map.Entry;
 
 public class Sudoku {
 
+	static boolean FOUND = false;
+
 	public static void main(String[] args) throws IOException {
 		Board board = new Board("data/sudoku.txt");
 		System.out.println(board);
 		System.out.println("-------------------------------------------------");
-		resolve(board, false);
+		resolve(board);
 	}
 
-	public static void resolve(Board board, boolean found) {
-		if (!found) {
+	public static void resolve(Board board) {
+		if (!FOUND) {
 			for (Entry<Integer, List<Point>> entry : board.getBestSquares().entrySet()) {
-				for (Point point : entry.getValue()) {
-					Square square = board.getBoard()[point.x][point.y];
-
-					for (String value : square.getLegalValues()) {
-						if (check(board, point, value)) {
-							Board newBoard = update(board, point, value);
-							System.out.println(newBoard);
-							if (newBoard.isFull()) {
-								System.out.println(newBoard);
-							}
-							else {
-								resolve(newBoard, false);
+				if (!FOUND) {
+					for (Point point : entry.getValue()) {
+						Square square = board.getBoard()[point.x][point.y];
+						if (!FOUND) {
+							for (String value : square.getLegalValues()) {
+								if (!FOUND) {
+									if (check(board, point, value)) {
+										Board newBoard = update(board, point, value);
+										System.out.println(newBoard);
+										if (newBoard.isFull()) {
+											System.out.println(newBoard);
+											FOUND = true;
+										}
+										else {
+											resolve(newBoard);
+										}
+									}
+								}
 							}
 						}
 					}
@@ -63,7 +71,7 @@ public class Sudoku {
 
 	private static Board update(Board board, Point point, String value) {
 		Board newBoard = new Board(board);
-		
+
 		for (int i = 0; i < newBoard.getSize(); i++) {
 			newBoard.getBoard()[i][point.y].updateLegalValues(value);
 			newBoard.getBoard()[point.x][i].updateLegalValues(value);
@@ -71,7 +79,7 @@ public class Sudoku {
 
 		int modRow = (point.x / Board.SQUARE_LATIN_SIZE) * Board.SQUARE_LATIN_SIZE;
 		int modColumn = (point.y / Board.SQUARE_LATIN_SIZE) * Board.SQUARE_LATIN_SIZE;
-		
+
 		for (int i = modRow; i < modRow + Board.SQUARE_LATIN_SIZE; i++) {
 			for (int j = modColumn; j < modColumn + Board.SQUARE_LATIN_SIZE; j++) {
 				newBoard.getBoard()[i][j].updateLegalValues(value);
@@ -82,7 +90,7 @@ public class Sudoku {
 		newBoard.getBoard()[point.x][point.y].setTaken(true);
 		newBoard.reduceSquareFree();
 		newBoard.findBestsSquare();
-		
+
 		return newBoard;
 	}
 }
