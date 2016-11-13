@@ -12,7 +12,7 @@ public final class Square {
 		this.taken = false;
 		this.value = "-";
 		this.legalValues = new HashSet<String>();
-		for (int i = 1; i <= Sudoku.SUDOKU_SIZE; i++) {
+		for (int i = 1; i <= Board.SUDOKU_SIZE; i++) {
 			legalValues.add(String.valueOf(i));
 		}
 	}
@@ -23,7 +23,7 @@ public final class Square {
 		
 		if (value.equals("-")) {
 			this.taken = false;
-			for (int i = 1; i <= Sudoku.SUDOKU_SIZE; i++) {
+			for (int i = 1; i <= Board.SUDOKU_SIZE; i++) {
 				legalValues.add(String.valueOf(i));
 			}
 		}
@@ -38,16 +38,14 @@ public final class Square {
 		this.legalValues = new HashSet<String>(square.getLegalValues());
 	}
 	
-	public void updatePossibleValues(String value) {
+	public void updateLegalValues(String value) {
 		this.legalValues.remove(value);
 	}
-	
-	
 
 	@Override
 	public String toString() {
-//		return value;
-		return String.valueOf(legalValues.size());
+		return value;
+//		return String.valueOf(legalValues.size());
 //		return possibleValues.toString();
 	}
 
