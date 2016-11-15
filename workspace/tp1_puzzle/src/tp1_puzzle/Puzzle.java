@@ -6,13 +6,35 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * Classe principale du Puzzle.
+ * 
+ * @author Steven Liatti
+ */
 public class Puzzle {
 
+	/**
+	 * Énumération pratique pour le menu utilisateur.
+	 * 
+	 * @author Steven Liatti
+	 */
 	enum Search {BLIND, SQUARE_FALSE, MANHATTAN;}
 
-	final static int SMALL_PUZZLE = 8;
-	final static int BIG_PUZZLE = 15;
+	/**
+	 * Taille du petit puzzle.
+	 */
+	public final static int SMALL_PUZZLE = 8;
+	/**
+	 * Taille du grand puzzle.
+	 */
+	public final static int BIG_PUZZLE = 15;
 
+	/**
+	 * Point d'entrée du programme. Affiche sur la sortie standard un menu 
+	 * demandant à l'utilisateur de choisir le mode du programme.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		final int[][] canonical8 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 		final int[][] canonical15 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
@@ -93,6 +115,20 @@ public class Puzzle {
 		}
 	}
 
+	/**
+	 * Cette fonction implémente tous les types de recherche possibles (dans le
+	 * cadre de ce TP) :
+	 * 
+	 * - Recherche aveugle avec et sans états visités
+	 * - Recherche avec les deux heuristiques, Manhattan et SquareFalse
+	 * 
+	 * @param startState
+	 * @param finalState
+	 * @param sizePuzzle
+	 * @param limit
+	 * @param visited Indique si les états visités doivent être gardés en mémoire ou non
+	 * @param search Indique le type de recherche : aveugle, SquareFalse ou Manhattan
+	 */
 	public static void search(State startState, State finalState, int sizePuzzle, int limit, boolean visited, Search search) {
 		State currentState = new State(startState);
 		int iterations = 0;

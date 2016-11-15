@@ -6,12 +6,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * Cette classe définit un état à un instant donné du puzzle.
+ * 
+ * @author Steven Liatti
+ */
 public class State {
 	private String strLayout;
 	private int[][] tabLayout;
 	private List<State> successors;
 	private int sizePuzzle;
 
+	/**
+	 * Construit un état à partir d'un tableau de int à 2 dimensions.
+	 * 
+	 * @param tabLayout
+	 */
 	public State(int[][] tabLayout) {
 		this.tabLayout = tabLayout;
 		this.generateStrLayout();
@@ -19,6 +29,11 @@ public class State {
 		this.sizePuzzle = strLayout.length() - 1;
 	}
 
+	/**
+	 * Construit un état à partir d'un autre.
+	 * 
+	 * @param state
+	 */
 	public State(State state) {
 		this.tabLayout = state.tabLayout;
 		this.strLayout = state.strLayout;
@@ -26,6 +41,12 @@ public class State {
 		this.sizePuzzle = strLayout.length() - 1;
 	}
 	
+	/**
+	 * Retourne un état aléatoire à partir d'un tableau à 2 dimensions.
+	 * 
+	 * @param array
+	 * @return un état aléatoire à partir d'un tableau à 2 dimensions.
+	 */
 	public static State randomState(int[][] array) {
 		Stack<Integer> oneDim = new Stack<Integer>();
 		int twoDim[][] = new int[array.length][array[0].length];
@@ -47,6 +68,13 @@ public class State {
 	    return new State(twoDim);
 	}
 	
+	/**
+	 * Constuit un nouvel état à partir d'une String
+	 * (exemple : "123456780").
+	 * 
+	 * @param str
+	 * @return un nouvel état
+	 */
 	public static State stateFromString(String str) {
 		String finalStr[] = str.split(" ");
 		final int sqrt = (int) Math.sqrt(finalStr.length);
@@ -60,6 +88,13 @@ public class State {
 		return new State(finalTab);
 	}
 	
+	/**
+	 * Affiche sur la sortie standard la situation lors du parcours des états.
+	 * 
+	 * @param startState
+	 * @param finalState
+	 * @param iterations
+	 */
 	public static void printSituation(State startState, State finalState, int iterations) {
 		System.out.println("Nombre d'itérations : " + iterations);
 		System.out.println("État de départ : ");
@@ -68,6 +103,14 @@ public class State {
 		System.out.println(finalState);
 	}
 	
+	/**
+	 * Affiche sur la sortie standard la situation lors du parcours des états.
+	 * 
+	 * @param startState
+	 * @param currentState
+	 * @param finalState
+	 * @param iterations
+	 */
 	public static void printSituation(State startState, State currentState, State finalState, int iterations) {
 		System.out.println("Nombre d'itérations : " + iterations);
 		System.out.println("État de départ : ");
@@ -79,10 +122,10 @@ public class State {
 	}
 	
 	/**
-	 * Première heuristique
+	 * Première heuristique. Calcule le nombre de plaquettes mal placées.
 	 * 
 	 * @param solution
-	 * @return
+	 * @return le nombre de plaquettes mal placées
 	 */
 	public int squareFalse(State solution) {
 		int squareFalse = 0;
@@ -111,7 +154,8 @@ public class State {
 	}
 	
 	/**
-	 * Deuxième heuristique
+	 * Deuxième heuristique. Calcule la somme des distances (Manhattan)
+	 * de chaque plaquette numérotée à sa position finale.
 	 * 
 	 * @param solution
 	 * @return
@@ -138,6 +182,7 @@ public class State {
 		strLayout = builder.toString();
 	}
 	
+	// Fonction de "swap" entre deux nombres dans le puzzle
 	private int[][] newTabLayout(Point oldPos, Point newPos) {
 		int newTabLayout[][] = new int[tabLayout.length][tabLayout[0].length];
 		for (int i = 0; i < newTabLayout.length; i++) {
@@ -162,8 +207,12 @@ public class State {
 		System.out.println();
 	}
 
+	/**
+	 * Génère les 2 à 4 successeurs à l'état courant (this).
+	 */
 	public void generateSuccessors() {
 		Point emptySquare = new Point();
+		// On cherche la case vide et on la stock dans emptySquare
 		for (int i = 0; i < tabLayout.length; i++) {
 			for (int j = 0; j < tabLayout[i].length; j++) {
 				if (tabLayout[i][j] == 0) {
@@ -175,6 +224,7 @@ public class State {
 		
 		int newTabLayout[][];
 
+		// On ajoute les successeurs possibles à this.successors
 		if (emptySquare.x - 1 >= 0) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x - 1, emptySquare.y));
 			successors.add(new State(newTabLayout));
@@ -242,10 +292,20 @@ public class State {
 		return builder.toString();
 	}
 
+	/**
+	 * Retourne les successeurs.
+	 * 
+	 * @return les successeurs
+	 */
 	public List<State> getSuccessors() {
 		return successors;
 	}
 
+	/**
+	 * Retourne la taille du puzzle.
+	 * 
+	 * @return la taille du puzzle
+	 */
 	public int getSizePuzzle() {
 		return sizePuzzle;
 	}

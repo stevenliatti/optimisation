@@ -2,10 +2,22 @@ package tp1_puzzle;
 
 import java.util.Comparator;
 
+/**
+ * Cette classe implémente un comparateur entre deux états
+ * avec l'heuristique Manhattan.
+ * 
+ * @author Steven Liatti
+ *
+ */
 public class Manhattan implements Comparator<State> {
 
 	private State solution;
 
+	/**
+	 * Construit un objet Manhattan
+	 * 
+	 * @param solution
+	 */
 	public Manhattan(State solution) {
 		this.solution = new State(solution);
 	}
