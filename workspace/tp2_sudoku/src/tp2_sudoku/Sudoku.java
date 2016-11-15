@@ -40,11 +40,7 @@ public class Sudoku {
 			return board;
 		}
 
-		//2. X <- sélectionner une variable absente de A
-		//3. D <- sélectionner un ordre sur le domaine de X
-		Board newBoard = new Board(board);
-		Square bestSquare = newBoard.getBestSquare();
-		List<String> values = bestSquare.getLegalValues();
+		List<String> values = board.getBestSquare().getLegalValues();
 
 		// 4. Pour chaque valeur v dans D faire
 		for (int i = 0; i < values.size(); i++) {
@@ -52,6 +48,8 @@ public class Sudoku {
 			// b. var-domaines <- forward checking(var-domaines, X, v, A)
 			// c. Si aucune variable a une domaine vide alors
 			// i. résultat <- PSC-BACKTRACKING(A, var-domaines)
+			Board newBoard = new Board(board);
+			Square bestSquare = newBoard.getBestSquare();
 			newBoard.update(bestSquare, values.get(i));
 			Board solution = resolve(newBoard);
 
