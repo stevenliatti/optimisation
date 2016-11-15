@@ -10,9 +10,8 @@ import java.util.List;
  * @author Steven Liatti
  */
 public class Sudoku {
-
-	static boolean FOUND = false;
-
+	static int recursions = 0;
+	
 	/**
 	 * Point d'entrée du programme.
 	 * 
@@ -24,6 +23,7 @@ public class Sudoku {
 		System.out.println(board);
 		Board solution = resolve(board);
 		System.out.println(solution);
+		System.out.println("Solution trouvée en " + recursions + " récursions");
 	}
 
 	/**
@@ -32,8 +32,9 @@ public class Sudoku {
 	 * @param board
 	 * @return
 	 */
-	public static Board resolve(Board board)
-	{
+	public static Board resolve(Board board) {
+		recursions++;
+		
 		// 1. Si assignement A est complet alors retourner A
 		if(board.isFull()) {
 			return board;
