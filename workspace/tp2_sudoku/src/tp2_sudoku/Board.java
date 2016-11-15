@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class Board {
-	public final static int SUDOKU_SIZE = 4;
+	public final static int SUDOKU_SIZE = 9;
 	public final static int SQUARE_LATIN_SIZE = (int) Math.sqrt(SUDOKU_SIZE);
 
 	private Square[][] board;
@@ -28,7 +28,7 @@ public class Board {
 		while ((line = br.readLine()) != null) {
 			split = line.split(" ");
 			for (int j = 0; j < SUDOKU_SIZE; j++) {
-				board[i][j] = new Square(split[j]);
+				board[i][j] = new Square(split[j], i, j);
 			}
 			i++;
 		}
@@ -59,6 +59,55 @@ public class Board {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+	
+	public Square getBestSquare() {
+		List<Point> points = bestSquares.get(bestSquares.firstKey());
+		Point point = points.get(0);
+		return board[point.x][point.y];
+	}
+	
+	public boolean update(String value) {
+		Square inUpdate = getBestSquare();
+		Point point = inUpdate.getPosition();
+		
+		int modRow = (point.x / Board.SQUARE_LATIN_SIZE) * Board.SQUARE_LATIN_SIZE;
+		int modColumn = (point.y / Board.SQUARE_LATIN_SIZE) * Board.SQUARE_LATIN_SIZE;
+
+		for (int i = 0; i < size; i++) {
+			if (board[i][point.y].getValue().equals(value))
+				return false;
+			if (board[point.x][i].getValue().equals(value))
+				return false;
+		}
+
+		for (int i = modRow; i < modRow + Board.SQUARE_LATIN_SIZE; i++) {
+			for (int j = modColumn; j < modColumn + Board.SQUARE_LATIN_SIZE; j++) {
+				if (board[i][j].getValue().equals(value))
+					return false;
+			}
+		}
+
+		
+		inUpdate.setTaken(true);
+		inUpdate.setValue(value);
+		
+		for (int i = 0; i < size; i++) {
+			board[i][point.y].updateLegalValues(value);
+			board[point.x][i].updateLegalValues(value);
+		}
+
+		for (int i = modRow; i < modRow + Board.SQUARE_LATIN_SIZE; i++) {
+			for (int j = modColumn; j < modColumn + Board.SQUARE_LATIN_SIZE; j++) {
+				board[i][j].updateLegalValues(value);
+			}
+		}
+
+		
+		this.reduceSquareFree();
+		this.findBestsSquare();
+		
+		return true;
 	}
 	
 	public void findBestsSquare() {

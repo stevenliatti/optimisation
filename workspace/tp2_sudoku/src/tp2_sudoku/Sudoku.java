@@ -3,7 +3,6 @@ package tp2_sudoku;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class Sudoku {
 
@@ -13,40 +12,66 @@ public class Sudoku {
 		Board board = new Board("data/sudoku.txt");
 		System.out.println(board);
 		System.out.println("-------------------------------------------------");
-		resolve(board);
+		Board solution = resolve(board);
+		System.out.println(solution);
 	}
 
-	public static void resolve(Board board) {
-		if (!FOUND) {
-			for (Entry<Integer, List<Point>> entry : board.getBestSquares().entrySet()) {
-				if (!FOUND) {
-					for (Point point : entry.getValue()) {
-						Square square = board.getBoard()[point.x][point.y];
-						if (!FOUND) {
-							for (String value : square.getLegalValues()) {
-								if (!FOUND) {
-									if (check(board, point, value)) {
-										Board newBoard = update(board, point, value);
-										System.out.println(newBoard);
-										if (newBoard.isFull()) {
-											System.out.println(newBoard);
-											FOUND = true;
-										}
-										else {
-											resolve(newBoard);
-										}
-									}
-								}
-							}
-						}
-					}
+	public static Board resolve(Board board)
+	{
+		if(board.isFull()) {
+			return board;
+		}
+
+		Board newBoard = new Board(board);
+		Square bestSquare = newBoard.getBestSquare();
+		List<String> values = board.getBestSquare().getLegalValues();
+
+		for (int i = 0; i < values.size(); i++) {
+			
+			if (newBoard.update(values.get(i))) {
+				
+				Board solution = resolve(newBoard);
+				
+				if(solution != null) {
+					return solution;
 				}
 			}
 		}
-		else {
-			System.out.println(board);
-		}
+
+		return null;
 	}
+
+	//	public static void resolve(Board board) {
+	//		if (!FOUND) {
+	//			for (Entry<Integer, List<Point>> entry : board.getBestSquares().entrySet()) {
+	//				if (!FOUND) {
+	//					for (Point point : entry.getValue()) {
+	//						Square square = board.getBoard()[point.x][point.y];
+	//						if (!FOUND) {
+	//							for (String value : square.getLegalValues()) {
+	//								if (!FOUND) {
+	//									if (check(board, point, value)) {
+	//										Board newBoard = update(board, point, value);
+	//										System.out.println(newBoard);
+	//										if (newBoard.isFull()) {
+	//											System.out.println(newBoard);
+	//											FOUND = true;
+	//										}
+	//										else {
+	//											resolve(newBoard);
+	//										}
+	//									}
+	//								}
+	//							}
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//		else {
+	//			System.out.println(board);
+	//		}
+	//	}
 
 	private static boolean check(Board board, Point point, String value) {
 		int modRow = (point.x / Board.SQUARE_LATIN_SIZE) * Board.SQUARE_LATIN_SIZE;

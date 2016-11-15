@@ -1,25 +1,35 @@
 package tp2_sudoku;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Square {
 	private boolean taken;
 	private String value;
-	private Set<String> legalValues;
+	private List<String> legalValues;
+	private Point position;
 	
-	public Square() {
-		this.taken = false;
-		this.value = "-";
-		this.legalValues = new HashSet<String>();
-		for (int i = 1; i <= Board.SUDOKU_SIZE; i++) {
-			legalValues.add(String.valueOf(i));
+	public Square(String value, int x, int y) {
+		this.legalValues = new ArrayList<String>();
+		this.value = value;
+		this.position = new Point(x, y);
+		
+		if (value.equals("-")) {
+			this.taken = false;
+			for (int i = 1; i <= Board.SUDOKU_SIZE; i++) {
+				legalValues.add(String.valueOf(i));
+			}
+		}
+		else {
+			this.taken = true;
 		}
 	}
 	
-	public Square(String value) {
-		this.legalValues = new HashSet<String>();
+	public Square(String value, Point position) {
+		this.legalValues = new ArrayList<String>();
 		this.value = value;
+		this.position = new Point(position);
 		
 		if (value.equals("-")) {
 			this.taken = false;
@@ -35,7 +45,8 @@ public final class Square {
 	public Square(Square square) {
 		this.taken = square.taken;
 		this.value = new String(square.value);
-		this.legalValues = new HashSet<String>(square.getLegalValues());
+		this.legalValues = new ArrayList<String>(square.getLegalValues());
+		this.position = new Point(square.position);
 	}
 	
 	public void updateLegalValues(String value) {
@@ -69,11 +80,19 @@ public final class Square {
 		this.value = value;
 	}
 
-	public Set<String> getLegalValues() {
+	public List<String> getLegalValues() {
 		return legalValues;
 	}
 	
-	public void setLegalValues(Set<String> legalValues) {
+	public void setLegalValues(List<String> legalValues) {
 		this.legalValues = legalValues;
+	}
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
 	}
 }
