@@ -24,17 +24,16 @@ public class Sudoku {
 
 		Board newBoard = new Board(board);
 		Square bestSquare = newBoard.getBestSquare();
-		List<String> values = board.getBestSquare().getLegalValues();
+		List<String> values = bestSquare.getLegalValues();
 
 		for (int i = 0; i < values.size(); i++) {
-			
-			if (newBoard.update(values.get(i))) {
-				
-				Board solution = resolve(newBoard);
-				
-				if(solution != null) {
-					return solution;
-				}
+
+//			bestSquare.setValue(values.get(i));
+			newBoard.update(bestSquare, values.get(i));
+			Board solution = resolve(newBoard);
+
+			if(solution != null) {
+				return solution;
 			}
 		}
 

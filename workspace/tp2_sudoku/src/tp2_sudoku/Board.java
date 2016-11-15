@@ -60,59 +60,46 @@ public class Board {
 		}
 		return sb.toString();
 	}
-	
+
 	public Square getBestSquare() {
 		List<Point> points = bestSquares.get(bestSquares.firstKey());
 		Point point = points.get(0);
 		return board[point.x][point.y];
 	}
-	
-	public boolean update(String value) {
-		Square inUpdate = getBestSquare();
+
+	public void update(Square inUpdate, String value) {
 		Point point = inUpdate.getPosition();
-		
+
+		inUpdate.setTaken(true);
+		inUpdate.setValue(value);
+
+		for (int i = 0; i < size; i++) {
+			if (board[i][point.y].isFree()) {
+				board[i][point.y].updateLegalValues(value);
+			}
+			if (board[point.x][i].isFree()) {
+				board[point.x][i].updateLegalValues(value);
+			}
+		}
+
 		int modRow = (point.x / Board.SQUARE_LATIN_SIZE) * Board.SQUARE_LATIN_SIZE;
 		int modColumn = (point.y / Board.SQUARE_LATIN_SIZE) * Board.SQUARE_LATIN_SIZE;
 
-		for (int i = 0; i < size; i++) {
-			if (board[i][point.y].getValue().equals(value))
-				return false;
-			if (board[point.x][i].getValue().equals(value))
-				return false;
-		}
-
 		for (int i = modRow; i < modRow + Board.SQUARE_LATIN_SIZE; i++) {
 			for (int j = modColumn; j < modColumn + Board.SQUARE_LATIN_SIZE; j++) {
-				if (board[i][j].getValue().equals(value))
-					return false;
+				if (board[i][j].isFree()) {
+					board[i][j].updateLegalValues(value);
+				}
 			}
 		}
 
-		
-		inUpdate.setTaken(true);
-		inUpdate.setValue(value);
-		
-		for (int i = 0; i < size; i++) {
-			board[i][point.y].updateLegalValues(value);
-			board[point.x][i].updateLegalValues(value);
-		}
-
-		for (int i = modRow; i < modRow + Board.SQUARE_LATIN_SIZE; i++) {
-			for (int j = modColumn; j < modColumn + Board.SQUARE_LATIN_SIZE; j++) {
-				board[i][j].updateLegalValues(value);
-			}
-		}
-
-		
 		this.reduceSquareFree();
 		this.findBestsSquare();
-		
-		return true;
 	}
-	
+
 	public void findBestsSquare() {
 		bestSquares = new TreeMap<Integer, List<Point>>();
-		
+
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if (board[i][j].isFree()) {
@@ -126,13 +113,13 @@ public class Board {
 			}
 		}
 	}
-	
+
 	private void initConstraint() {
 		for (int i = 0; i < this.size; i++) {
 			for (int j = 0; j < this.size; j++) {
 				if (board[i][j].isTaken()) {
 					this.squaresFree--;
-					
+
 					for (int k = 0; k < board.length; k++) {
 						if (board[i][k].isFree()) {
 							board[i][k].getLegalValues().remove(board[i][j].getValue());
@@ -160,19 +147,19 @@ public class Board {
 		}
 		findBestsSquare();
 	}
-	
+
 	public void reduceSquareFree() {
 		squaresFree--;
 	}
-	
+
 	public boolean isFull() {
 		return squaresFree == 0;
 	}
-	
+
 	public Square[][] getBoard() {
 		return board;
 	}
-	
+
 	public int getSize() {
 		return size;
 	}
