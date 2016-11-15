@@ -8,6 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+/**
+ * Cette classe définit une grille de sudoku, composée de
+ * cases (Square). Elle contient la taille (du carré, le côté),
+ * le nombre de cases vides et un tableau associatif entre un nombre
+ * de possibilités par case et la liste des positions (dans la grille)
+ * associées.
+ * 
+ * @author Steven Liatti
+ */
 public class Board {
 	public final static int SUDOKU_SIZE = 9;
 	public final static int SQUARE_LATIN_SIZE = (int) Math.sqrt(SUDOKU_SIZE);
@@ -17,6 +26,12 @@ public class Board {
 	private int squaresFree;
 	private TreeMap<Integer, List<Point>> bestSquares;
 
+	/**
+	 * Construit une nouvelle grille à partir d'un fichier (son nom). 
+	 * 
+	 * @param fileName
+	 * @throws IOException
+	 */
 	public Board(String fileName) throws IOException {
 		this.size = SUDOKU_SIZE;
 		this.squaresFree = size * size;
@@ -35,7 +50,12 @@ public class Board {
 		br.close();
 		initConstraint();
 	}
-
+	
+	/**
+	 * Construit une grille à partir d'une autre.
+	 * 
+	 * @param other
+	 */
 	public Board(Board other) {
 		this.size = other.size;
 		this.squaresFree = other.squaresFree;
@@ -49,6 +69,10 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Retourne un String mentionnant les cases libres et une représentation
+	 * classique du sudoku.
+	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Cases libres : " + squaresFree + "\n");
@@ -61,12 +85,24 @@ public class Board {
 		return sb.toString();
 	}
 
+	/**
+	 * Retourne la case la plus contrainte (qui possède le moins de possibilités).
+	 * 
+	 * @return
+	 */
 	public Square getBestSquare() {
 		List<Point> points = bestSquares.get(bestSquares.firstKey());
 		Point point = points.get(0);
 		return board[point.x][point.y];
 	}
 
+	/**
+	 * Met à jour la grille lorsqu'une nouvelle valeur légale est
+	 * insérée dans la case la plus contrainte.
+	 * 
+	 * @param inUpdate
+	 * @param value
+	 */
 	public void update(Square inUpdate, String value) {
 		Point point = inUpdate.getPosition();
 
@@ -97,6 +133,9 @@ public class Board {
 		this.findBestsSquare();
 	}
 
+	/**
+	 * Recalcule la table associative des meilleures cases.
+	 */
 	public void findBestsSquare() {
 		bestSquares = new TreeMap<Integer, List<Point>>();
 
@@ -114,6 +153,10 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Initialisation des contraintes. Est appelée à la construction de l'objet.
+	 * Elle actualise les cases légales pour chaque case.
+	 */
 	private void initConstraint() {
 		for (int i = 0; i < this.size; i++) {
 			for (int j = 0; j < this.size; j++) {
@@ -148,43 +191,38 @@ public class Board {
 		findBestsSquare();
 	}
 
+	/**
+	 * Réduit le nombre de cases vides de 1.
+	 */
 	public void reduceSquareFree() {
 		squaresFree--;
 	}
 
+	/**
+	 * Indique si le sudoku est rempli et donc (en théorie)
+	 * une solution a été trouvée.
+	 * 
+	 * @return
+	 */
 	public boolean isFull() {
 		return squaresFree == 0;
 	}
 
+	/**
+	 * Retourne le tableau à deux dimensions contenant les cases.
+	 * 
+	 * @return le tableau à deux dimensions contenant les cases
+	 */
 	public Square[][] getBoard() {
 		return board;
 	}
 
+	/**
+	 * Retourne la taille de la grille.
+	 * 
+	 * @return la taille de la grille
+	 */
 	public int getSize() {
 		return size;
-	}
-
-	public int getSquaresFree() {
-		return squaresFree;
-	}
-
-	public void setSquaresFree(int squaresFree) {
-		this.squaresFree = squaresFree;
-	}
-
-	public void setBoard(Square[][] board) {
-		this.board = board;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-
-	public TreeMap<Integer, List<Point>> getBestSquares() {
-		return bestSquares;
-	}
-
-	public void setBestSquares(TreeMap<Integer, List<Point>> bestSquares) {
-		this.bestSquares = bestSquares;
 	}
 }
