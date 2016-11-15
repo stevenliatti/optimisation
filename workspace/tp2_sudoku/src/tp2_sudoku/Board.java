@@ -76,11 +76,24 @@ public class Board {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Cases libres : " + squaresFree + "\n");
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int j = 0; j < size + SQUARE_LATIN_SIZE; j++) {
+			sb.append("_ ");
+		}
+		sb.append("\n\n");
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
 				sb.append(board[i][j] + " ");
+				if (j % SQUARE_LATIN_SIZE == SQUARE_LATIN_SIZE - 1) {
+					sb.append("| ");
+				}
 			}
 			sb.append("\n");
+			if (i % SQUARE_LATIN_SIZE == SQUARE_LATIN_SIZE - 1) {
+				for (int j = 0; j < size + SQUARE_LATIN_SIZE; j++) {
+					sb.append("_ ");
+				}
+				sb.append("\n\n");
+			}
 		}
 		return sb.toString();
 	}

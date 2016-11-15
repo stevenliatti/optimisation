@@ -22,7 +22,6 @@ public class Sudoku {
 	public static void main(String[] args) throws IOException {
 		Board board = new Board("data/sudoku.txt");
 		System.out.println(board);
-		System.out.println("-----------------------");
 		Board solution = resolve(board);
 		System.out.println(solution);
 	}
