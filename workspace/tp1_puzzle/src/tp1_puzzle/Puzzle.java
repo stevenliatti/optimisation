@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -40,6 +41,7 @@ public class Puzzle {
 		final int[][] canonical15 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
 		final int LIMIT = 300000;
 		final int[][] canonical;
+		Stack<State> parents;
 
 		State startState;
 		State finalState;
@@ -93,25 +95,34 @@ public class Puzzle {
 
 		switch (str) {
 		case "1":
-			search(startState, finalState, sizePuzzle, LIMIT, false, Search.BLIND);
+			parents = search(startState, finalState, sizePuzzle, LIMIT, false, Search.BLIND);
 			break;
 		case "2":
 			if (sizePuzzle == SMALL_PUZZLE) {
-				search(startState, finalState, sizePuzzle, LIMIT, true, Search.BLIND);
+				parents = search(startState, finalState, sizePuzzle, LIMIT, true, Search.BLIND);
 			}
 			else {
 				throw new IllegalArgumentException("Vous ne pouvez faire une recherche avec états visités avec une taille > 8");
 			}
 			break;
 		case "3":
-			search(startState, finalState, sizePuzzle, LIMIT, true, Search.SQUARE_FALSE);
+			parents = search(startState, finalState, sizePuzzle, LIMIT, true, Search.SQUARE_FALSE);
 			break;
 		case "4":
-			search(startState, finalState, sizePuzzle, LIMIT, true, Search.MANHATTAN);
+			parents = search(startState, finalState, sizePuzzle, LIMIT, true, Search.MANHATTAN);
 			break;
 		default:
-			search(startState, finalState, sizePuzzle, LIMIT, false, Search.BLIND);
+			parents = search(startState, finalState, sizePuzzle, LIMIT, false, Search.BLIND);
 			break;
+		}
+		
+		System.out.println("Voulez-vous afficher le chemin-état ? (y/n)");
+		
+		if (sc.nextLine().equals("y")) {
+			while (!parents.isEmpty()) {
+				State state = parents.pop();
+				System.out.println(state);
+			}
 		}
 	}
 
@@ -129,7 +140,7 @@ public class Puzzle {
 	 * @param visited Indique si les états visités doivent être gardés en mémoire ou non
 	 * @param search Indique le type de recherche : aveugle, SquareFalse ou Manhattan
 	 */
-	public static void search(State startState, State finalState, int sizePuzzle, int limit, boolean visited, Search search) {
+	public static Stack<State> search(State startState, State finalState, int sizePuzzle, int limit, boolean visited, Search search) {
 		State currentState = new State(startState);
 		int iterations = 0;
 		Queue<State> queue;
@@ -154,7 +165,7 @@ public class Puzzle {
 		if (currentState.equals(finalState)) {
 			System.out.println("Trouvé !");
 			State.printSituation(startState, currentState, iterations);
-			return;
+			return null;
 		}
 
 		// 2. INSERER(noeud-initial,FILE)
@@ -169,7 +180,7 @@ public class Puzzle {
 			if (queue.isEmpty()) {
 				System.out.println("Échec");
 				State.printSituation(startState, currentState, iterations);
-				return;
+				return null;
 			}
 
 			if (sizePuzzle == BIG_PUZZLE) {
@@ -177,7 +188,7 @@ public class Puzzle {
 				if (queue.size() >= limit) {
 					System.out.println("Seuil fixé (" + limit + ") dépassé");
 					State.printSituation(startState, currentState, finalState, iterations);
-					return;
+					return null;
 				}
 			}
 
@@ -185,14 +196,19 @@ public class Puzzle {
 			// c. s <- ETAT(n)
 			currentState = queue.poll();
 			iterations++;
-			System.out.println("--- " + iterations + " ---");
-			System.out.println(currentState);
 			// i.  Créer un nouveau noeud n' comme "enfant" de n
 			// ii. Si SOLUTION?(s') alors retourner chemin ou état-solution
 			if (currentState.equals(finalState)) {
 				System.out.println("Trouvé !");
 				State.printSituation(startState, currentState, iterations);
-				return;
+				State parent = currentState.getParentState();
+				Stack<State> parents = new Stack<State>();
+				while (!parent.equals(startState)) {
+					parents.add(parent);
+					parent = parent.getParentState();
+				}
+				System.out.println("La solution a été trouvée en " + parents.size() + " coups (ou niveaux dans l'arbre des solutions).");
+				return parents;
 			}
 			currentState.generateSuccessors();
 			for (State state : currentState.getSuccessors()) {

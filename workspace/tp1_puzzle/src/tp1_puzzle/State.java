@@ -16,6 +16,7 @@ public class State {
 	private int[][] tabLayout;
 	private List<State> successors;
 	private int sizePuzzle;
+	private State parentState;
 
 	/**
 	 * Construit un état à partir d'un tableau de int à 2 dimensions.
@@ -39,6 +40,7 @@ public class State {
 		this.strLayout = state.strLayout;
 		this.successors = state.successors;
 		this.sizePuzzle = strLayout.length() - 1;
+		this.parentState = state.parentState;
 	}
 	
 	/**
@@ -96,7 +98,7 @@ public class State {
 	 * @param iterations
 	 */
 	public static void printSituation(State startState, State finalState, int iterations) {
-		System.out.println("Nombre d'itérations : " + iterations);
+		System.out.println("Nombre d'états parcourus : " + iterations);
 		System.out.println("État de départ : ");
 		System.out.println(startState);
 		System.out.println("État final : ");
@@ -112,7 +114,7 @@ public class State {
 	 * @param iterations
 	 */
 	public static void printSituation(State startState, State currentState, State finalState, int iterations) {
-		System.out.println("Nombre d'itérations : " + iterations);
+		System.out.println("Nombre d'états parcourus : " + iterations);
 		System.out.println("État de départ : ");
 		System.out.println(startState);
 		System.out.println("État courant : ");
@@ -227,19 +229,27 @@ public class State {
 		// On ajoute les successeurs possibles à this.successors
 		if (emptySquare.x - 1 >= 0) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x - 1, emptySquare.y));
-			successors.add(new State(newTabLayout));
+			State successor = new State(newTabLayout);
+			successor.setParentState(this);
+			successors.add(successor);
 		}
 		if (emptySquare.x + 1 < tabLayout.length) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x + 1, emptySquare.y));
-			successors.add(new State(newTabLayout));
+			State successor = new State(newTabLayout);
+			successor.setParentState(this);
+			successors.add(successor);
 		}
 		if (emptySquare.y - 1 >= 0) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x, emptySquare.y - 1));
-			successors.add(new State(newTabLayout));
+			State successor = new State(newTabLayout);
+			successor.setParentState(this);
+			successors.add(successor);
 		}
 		if (emptySquare.y + 1 < tabLayout[0].length) {
 			newTabLayout = newTabLayout(emptySquare, new Point(emptySquare.x, emptySquare.y + 1));
-			successors.add(new State(newTabLayout));
+			State successor = new State(newTabLayout);
+			successor.setParentState(this);
+			successors.add(successor);
 		}
 	}
 
@@ -308,5 +318,23 @@ public class State {
 	 */
 	public int getSizePuzzle() {
 		return sizePuzzle;
+	}
+	
+	/**
+	 * Retourne le parent de l'état courant.
+	 * 
+	 * @return le parent de l'état courant
+	 */
+	public State getParentState() {
+		return parentState;
+	}
+
+	/**
+	 * Définit le parent de l'état courant.
+	 * 
+	 * @param parentState
+	 */
+	public void setParentState(State parentState) {
+		this.parentState = parentState;
 	}
 }
